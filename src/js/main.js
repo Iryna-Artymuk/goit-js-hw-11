@@ -1,9 +1,7 @@
 import FetchAPI from './servise_API';
 import creatMarkup from './creat_markup';
-import showgallery from './lightBox';
-import Notify from 'simple-notify';
-// import setObserver from './observer';
 
+import Notify from 'simple-notify';
 import 'simple-notify/dist/simple-notify.min.css';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
@@ -12,6 +10,7 @@ const form = document.querySelector('#search-form');
 const gallery = document.querySelector('.gallery');
 const guard = document.querySelector('.guard');
 form.addEventListener('submit', getPictureOnSubmit);
+
 const options = {
   root: null,
   rootMargin: '300px',
@@ -21,6 +20,7 @@ const options = {
 const observer = new IntersectionObserver(loadMoreOnScroll, options);
 function getPictureOnSubmit(event) {
   event.preventDefault();
+
   fetchAPI.searchQuery = event.currentTarget.elements.searchQuery.value.trim();
   fetchAPI.resetPage();
   gallery.innerHTML = '';
@@ -41,10 +41,13 @@ function getPictureOnSubmit(event) {
       autoclose: true,
     });
     fetchAPI.pictureArr = resp.data.hits;
-
+    let originalGallery = new SimpleLightbox('.gallery a', {
+      captionsData: 'alt',
+      captionDelay: 250,
+    });
     gallery.insertAdjacentHTML('beforeend', creatMarkup(fetchAPI.pictureArr));
+    // originalGallery.refresh();
     observer.observe(guard);
-    showgallery();
   });
 }
 function loadMoreOnScroll(entries, observer) {
@@ -67,6 +70,7 @@ function loadMoreOnScroll(entries, observer) {
           });
           return;
         }
+
         gallery.insertAdjacentHTML(
           'beforeend',
           creatMarkup(fetchAPI.pictureArr)
