@@ -16,7 +16,8 @@ export default function creatMarkup(pictures) {
   <img src="${webformatURL}" alt="${tags}" loading="lazy" class="photo"  > </div>
   <div class="info" >
     <p class="info-item">
-      <span>Likes </span>  <span>${likes} </span>
+   
+      <span>Likes  </span>  <span>${likes} </span>
     </p>
     <p class="info-item">
     <span>Views</span>  <span>${views} </span>
@@ -24,7 +25,7 @@ export default function creatMarkup(pictures) {
     </p>
     <p class="info-item">
 
-     <span>Comments</span>  <span>${comments} </span>
+     <span> Comments</span>  <span>${comments} </span>
       
     </p>
     <p class="info-item">
