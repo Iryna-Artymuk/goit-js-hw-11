@@ -25,6 +25,15 @@ function getPictureOnSubmit(event) {
   fetchAPI.resetPage();
   gallery.innerHTML = '';
   fetchAPI.fetchPictures().then(resp => {
+    if (resp.data.hits.length === 0) {
+      new Notify({
+        status: 'warning',
+        title: 'Sorry',
+        text: ` There are no images matching your search query. Please try again..`,
+        autoclose: true,
+      });
+      return;
+    }
     new Notify({
       status: 'success',
       title: 'Hooray!',
