@@ -1,8 +1,9 @@
 import FetchAPI from './servise_API';
 import creatMarkup from './creat_markup';
 import showgallery from './lightBox';
-
 import Notify from 'simple-notify';
+// import setObserver from './observer';
+
 import 'simple-notify/dist/simple-notify.min.css';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
@@ -11,7 +12,6 @@ const form = document.querySelector('#search-form');
 const gallery = document.querySelector('.gallery');
 const guard = document.querySelector('.guard');
 form.addEventListener('submit', getPictureOnSubmit);
-
 const options = {
   root: null,
   rootMargin: '300px',
@@ -19,23 +19,18 @@ const options = {
 };
 
 const observer = new IntersectionObserver(loadMoreOnScroll, options);
-
 function getPictureOnSubmit(event) {
   event.preventDefault();
   fetchAPI.searchQuery = event.currentTarget.elements.searchQuery.value.trim();
-  console.log(fetchAPI.searchQuery);
   fetchAPI.resetPage();
   gallery.innerHTML = '';
   fetchAPI.fetchPictures().then(resp => {
     new Notify({
       status: 'success',
       title: 'Hooray!',
-      text: `  We found ${resp.data.totalHits} images `,
+      text: ` Hooray! We found ${resp.data.totalHits} images.`,
       autoclose: true,
     });
-
-    console.log(resp.data);
-
     fetchAPI.pictureArr = resp.data.hits;
 
     gallery.insertAdjacentHTML('beforeend', creatMarkup(fetchAPI.pictureArr));
@@ -49,13 +44,9 @@ function loadMoreOnScroll(entries, observer) {
       fetchAPI.updatePage();
 
       fetchAPI.fetchPictures().then(resp => {
-        console.log(resp.data.hits.length);
-        console.log(resp.data.totalHits);
         const maxAmountPages = Math.round(
           resp.data.totalHits / resp.data.hits.length
         );
-        console.log(maxAmountPages);
-        console.log(fetchAPI.page);
 
         fetchAPI.pictureArr = resp.data.hits;
         if (fetchAPI.page === maxAmountPages) {
