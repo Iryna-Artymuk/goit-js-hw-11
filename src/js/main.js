@@ -1,7 +1,11 @@
 import FetchAPI from './servise_API';
 import creatMarkup from './creat_markup';
+import showgallery from './lightBox';
+
 import Notify from 'simple-notify';
 import 'simple-notify/dist/simple-notify.min.css';
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
 const fetchAPI = new FetchAPI();
 const form = document.querySelector('#search-form');
 const gallery = document.querySelector('.gallery');
@@ -36,6 +40,7 @@ function getPictureOnSubmit(event) {
 
     gallery.insertAdjacentHTML('beforeend', creatMarkup(fetchAPI.pictureArr));
     observer.observe(guard);
+    showgallery();
   });
 }
 function loadMoreOnScroll(entries, observer) {
