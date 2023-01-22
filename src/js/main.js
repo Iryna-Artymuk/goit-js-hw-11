@@ -24,58 +24,74 @@ function getPictureOnSubmit(event) {
   fetchAPI.searchQuery = event.currentTarget.elements.searchQuery.value.trim();
   fetchAPI.resetPage();
   gallery.innerHTML = '';
-  fetchAPI.fetchPictures().then(resp => {
-    if (resp.data.hits.length === 0) {
+  fetchAPI
+    .fetchPictures()
+    .then(resp => {
+      if (resp.data.hits.length === 0) {
+        new Notify({
+          status: 'warning',
+          title: 'Sorry',
+          text: ` There are no images matching your search query. Please try again..`,
+          autoclose: true,
+        });
+        return;
+      }
+
+      fetchAPI.pictureArr = resp.data.hits;
+      let sliderGallery = new SimpleLightbox('.gallery a', {
+        captionsData: 'alt',
+        captionDelay: 250,
+      });
+      gallery.insertAdjacentHTML('beforeend', creatMarkup(fetchAPI.pictureArr));
+      sliderGallery.refresh();
+      observer.observe(guard);
+    })
+    .catch(err => {
+      console.log(err);
       new Notify({
         status: 'warning',
-        title: 'Sorry',
-        text: ` There are no images matching your search query. Please try again..`,
+        title: '  Ops! ',
+        text: ' Somthing went wrong try again ',
         autoclose: true,
       });
-      return;
-    }
-    new Notify({
-      status: 'success',
-      title: 'Hooray!',
-      text: ` Hooray! We found ${resp.data.totalHits} images.`,
-      autoclose: true,
     });
-    fetchAPI.pictureArr = resp.data.hits;
-    let sliderGallery = new SimpleLightbox('.gallery a', {
-      captionsData: 'alt',
-      captionDelay: 250,
-    });
-    gallery.insertAdjacentHTML('beforeend', creatMarkup(fetchAPI.pictureArr));
-    sliderGallery.refresh();
-    observer.observe(guard);
-  });
 }
 function loadMoreOnScroll(entries, observer) {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
       fetchAPI.updatePage();
 
-      fetchAPI.fetchPictures().then(resp => {
-        const maxAmountPages = Math.round(
-          resp.data.totalHits / resp.data.hits.length
-        );
+      fetchAPI
+        .fetchPictures()
+        .then(resp => {
+          const maxAmountPages = Math.round(
+            resp.data.totalHits / resp.data.hits.length
+          );
 
-        fetchAPI.pictureArr = resp.data.hits;
-        if (fetchAPI.page === maxAmountPages) {
+          fetchAPI.pictureArr = resp.data.hits;
+          if (fetchAPI.page === maxAmountPages) {
+            new Notify({
+              status: 'warning',
+              title: "We're sorry ",
+              text: '  You have reached the end of search results.',
+              autoclose: true,
+            });
+            return;
+          }
+
+          gallery.insertAdjacentHTM(
+            'beforeend',
+            creatMarkup(fetchAPI.pictureArr)
+          );
+        })
+        .catch(err => {
+          console.log(err);
           new Notify({
             status: 'warning',
-            title: "We're sorry ",
-            text: '  You have reached the end of search results.',
-            autoclose: true,
+            title: '  Ops! ',
+            text: ' Somthing went wrong can not load more pictures try again ',
           });
-          return;
-        }
-
-        gallery.insertAdjacentHTML(
-          'beforeend',
-          creatMarkup(fetchAPI.pictureArr)
-        );
-      });
+        });
     }
   });
 }
