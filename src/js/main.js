@@ -79,7 +79,7 @@ function loadMoreOnScroll(entries, observer) {
             return;
           }
 
-          gallery.insertAdjacentHTM(
+          gallery.insertAdjacentHTML(
             'beforeend',
             creatMarkup(fetchAPI.pictureArr)
           );
@@ -89,7 +89,7 @@ function loadMoreOnScroll(entries, observer) {
           new Notify({
             status: 'warning',
             title: '  Ops! ',
-            text: ' Somthing went wrong can not load more pictures try again ',
+            text: ' Somthing went wrong can not load more pictures, try again ',
           });
         });
     }
