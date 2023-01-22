@@ -41,12 +41,12 @@ function getPictureOnSubmit(event) {
       autoclose: true,
     });
     fetchAPI.pictureArr = resp.data.hits;
-    let originalGallery = new SimpleLightbox('.gallery a', {
+    let sliderGallery = new SimpleLightbox('.gallery a', {
       captionsData: 'alt',
       captionDelay: 250,
     });
     gallery.insertAdjacentHTML('beforeend', creatMarkup(fetchAPI.pictureArr));
-    // originalGallery.refresh();
+    sliderGallery.refresh();
     observer.observe(guard);
   });
 }
