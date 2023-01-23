@@ -10,14 +10,29 @@ const form = document.querySelector('#search-form');
 const gallery = document.querySelector('.gallery');
 const guard = document.querySelector('.guard');
 form.addEventListener('submit', getPictureOnSubmit);
+const pixabay_URL = 'https://pixabay.com/api/';
+const KEY = '32771968-7fd567c901afb84ab6320145c';
+const pixabay_options = {
+  params: {
+    key: KEY,
+    q: fetchAPI.searchQuery,
+    image_type: 'photo',
+    orientation: 'horizontal',
+    safesearch: true,
+    per_page: 40,
+    page: fetchAPI.page,
+  },
+};
 
-const options = {
+fetchAPI.BASE_URL = pixabay_URL;
+
+fetchAPI.options = pixabay_options;
+const observer_options = {
   root: null,
   rootMargin: '300px',
   threshold: 1.0,
 };
-
-const observer = new IntersectionObserver(loadMoreOnScroll, options);
+const observer = new IntersectionObserver(loadMoreOnScroll, observer_options);
 function getPictureOnSubmit(event) {
   event.preventDefault();
 
