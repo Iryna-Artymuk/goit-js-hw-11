@@ -36,7 +36,12 @@ function getPictureOnSubmit(event) {
         });
         return;
       }
-
+      new Notify({
+        status: 'success',
+        title: 'Hooray!',
+        text: `We found ${resp.data.totalHits} images.`,
+        autoclose: true,
+      });
       fetchAPI.pictureArr = resp.data.hits;
       let sliderGallery = new SimpleLightbox('.gallery a', {
         captionsData: 'alt',
