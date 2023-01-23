@@ -18,6 +18,7 @@ export default class FetchAPI {
         safesearch: 'safesearch',
         page: this.page,
         per_page: 40,
+        lang: 'ru',
       },
     };
     return await axios.get(this.URL, options);
